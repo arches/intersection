@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 20101022033705) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.string   "remote_id"
+    t.string   "primary_photo_url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -35,13 +36,12 @@ ActiveRecord::Schema.define(:version => 20101022033705) do
     t.datetime "updated_at"
   end
 
-  create_table "flickr_infos", :force => true do |t|
+  create_table "flickr_albums", :force => true do |t|
     t.string   "farm"
     t.string   "server"
-    t.string   "remote_id"
+    t.string   "photoset_id"
     t.string   "secret"
-    t.string   "owner_type"
-    t.string   "owner_id"
+    t.integer  "album_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

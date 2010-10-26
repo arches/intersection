@@ -30,6 +30,8 @@
 </head>
 <body>
 
+<div id="stage">&nbsp;</div>
+
 <div id="prompt">
   <div class="explanation">
     <h1>Move Photos from Flickr to Facebook</h1>
@@ -61,13 +63,20 @@
 
 
 <div id="accounts_container">
-  <div id="connect"></div>
+  <!--<div id="connect"></div>-->
   <% @accounts.each do |account| %>
     <div class="<%= account.provider %> account">
       <h2><%= account.provider %> albums</h2>
       <% account.albums.each do |album| %>
         <div class="album" data-id="<%= album.id %>">
           <div class="image">
+            <% if album.primary_photo_url %>
+              <%= image_tag album.primary_photo_url %>
+            <% elsif album.photos and album.photos.length > 0 %>
+                <%= image_tag album.photos[0].url %>
+            <% else %>
+              <%= image_tag "spinner.gif", :class => 'spinner' %>
+            <% end %>
             <!-- spinner, or -->
             <!-- primary photo -->
           </div>

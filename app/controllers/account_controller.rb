@@ -8,6 +8,10 @@ class AccountController < ApplicationController
     redirect_to root_path
   end
 
+  def check_flickr_token
+    FlickrAccount.find(session[:flickr_account_id]).check_token
+  end
+
   def new
     account = self.send("new_#{params[:provider]}_account")
   end

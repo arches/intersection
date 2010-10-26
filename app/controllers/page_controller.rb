@@ -23,7 +23,9 @@ class PageController < ApplicationController
   
   def load_album_images
     album = Album.find(params[:id])
-    album.owner.get_images_for(album)
+    if album.photos.nil? or album.photos.empty?
+      album.owner.get_images_for(album)
+    end
     respond_to do |format|
       format.js do
         render :text => album.photos.to_json

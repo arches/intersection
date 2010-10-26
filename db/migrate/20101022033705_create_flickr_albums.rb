@@ -1,12 +1,11 @@
-class CreateFlickrInfos < ActiveRecord::Migration
+class CreateFlickrAlbums < ActiveRecord::Migration
   def self.up
-    create_table :flickr_infos do |t|
+    create_table :flickr_albums do |t|
       t.string :farm
       t.string :server
-      t.string :remote_id
+      t.string :photoset_id
       t.string :secret
-      t.string :owner_type
-      t.string :owner_id
+      t.integer :album_id
 
       t.timestamps
     end

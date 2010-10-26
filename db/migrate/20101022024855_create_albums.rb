@@ -5,6 +5,7 @@ class CreateAlbums < ActiveRecord::Migration
       t.integer :owner_id
       t.string :owner_type
       t.string :remote_id
+      t.string :primary_photo_url # TODO: push this into photo table
 
       t.timestamps
     end

@@ -34,11 +34,10 @@ class FlickrAccount < ActiveRecord::Base
       photosets = [photosets]
     end
     photosets.each do |set|
-      album = Album.new({:name => set["title"]})
-      album.create_flickr_album({:farm => set["farm"], :server => set["server"], :remote_id => set["id"], :secret => set["secret"]})
+      album = Album.new({:name => set["title"], :primary_photo_url => "http://farm#{set['farm']}.static.flickr.com/#{set['server']}/#{set['primary']}_#{set['secret']}.jpg"})
+      album.create_flickr_album({:farm => set["farm"], :server => set["server"], :photoset_id => set["id"], :secret => set["secret"]})
       self.albums << album
       album.save!
-      get_images_for(album)
     end
 
     # photostream
@@ -47,38 +46,34 @@ class FlickrAccount < ActiveRecord::Base
     album.save!
   end
 
+  def check_token
+    xml = get(self.flickr_url({"method" => "flickr.auth.checkToken", "auth_token" => self.token}))
+    parsed = Crack::XML.parse(xml.body)
+    raise parsed.inspect.to_s
+   end
+
   def get_images_for(album)
     album.photos.destroy_all if album.photos
 
     if (album.name == "Photostream")
-      # photostream
-      xml = get(self.flickr_url({"method" => "flickr.people.getPhotos", "user_id" => self.remote_id}))
+      xml = get(self.flickr_url({"method" => "flickr.people.getPhotos", "user_id" => self.remote_id, "auth_token" => self.token}))
       parsed = Crack::XML.parse(xml.body)
-      photos = parsed["rsp"]["photos"]
-      unless photos.class == Array
-        photos = [photos]
-      end
-      photos.each do |set|
-        pic = Photo.new({:url => "http://farm#{photo['farm']}.static.flickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",
-                         :remote_id => [photo['farm'], photo['server'], photo['id'], photo['secret']].join(":")})
-        album.photos << pic
-        pic.create_flickr_album({:farm => set["farm"], :server => set["server"], :remote_id => set["id"], :secret => set["secret"]})
-        get_images_for(album)
-      end
+      photos = parsed["rsp"]["photos"]["photo"]
     else
-      # sets
       xml = get(flickr_url({"method" => "flickr.photosets.getPhotos", "photoset_id" => album.flickr_album.photoset_id}))
       parsed = Crack::XML.parse(xml.body)
       photos = parsed["rsp"]["photoset"]["photo"]
-      unless photos.class == Array
-        photos = [photos]
-      end
-      photos.each do |photo|
-        pic = Photo.new({:url => "http://farm#{photo['farm']}.static.flickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",
-                         :remote_id => [photo['farm'], photo['server'], photo['id'], photo['secret']].join(":")})
-        album.photos << pic
-      end
     end
+
+    unless photos.class == Array
+      photos = [photos]
+    end
+    photos.each do |photo|
+      pic = Photo.new({:url => "http://farm#{photo['farm']}.static.flickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",
+                       :remote_id => [photo['farm'], photo['server'], photo['id'], photo['secret']].join(":")})
+      album.photos << pic
+    end
+
 
   end
 
