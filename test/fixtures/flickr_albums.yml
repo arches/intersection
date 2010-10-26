@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  farm: MyString
+  server: MyString
+  album_id: 1
+  photoset_id: MyString
+  secret: MyString
+
+two:
+  farm: MyString
+  server: MyString
+  album_id: 1
+  photoset_id: MyString
+  secret: MyString

@@ -1,0 +1,225 @@
+/* reset */
+body { background-color: #fff; color: #333; }
+
+body, p, ol, ul, td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
+  line-height: 18px;
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+a { color: #000; }
+a:visited { color: #666; }
+a:hover { color: #fff; background-color:#000; }
+
+div.field, div.actions {
+  margin-bottom: 10px;
+}
+
+#notice {
+  color: green;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  margin-bottom: 0px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+/* v2 */
+
+body {
+  padding-bottom: 133px;
+}
+
+.account {
+  margin: 10px;
+}
+
+.album {
+  height: 153px;
+  width: 133px;
+  margin: 10px;
+  display: inline-block;
+}
+
+.album .image {
+  height: 133px;
+  width: 133px;
+  overflow: hidden;
+  border: 1px solid #bbb;
+  background: #f5f5f5;
+  text-align: center;
+}
+
+.album .info {
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.account.facebook {
+  color: #3B5998;
+}
+.account.flickr {
+  color: #FF0084;
+}
+
+.facebook.album.dropVisual {
+  background: #6B89C8;
+}
+
+
+
+
+#connect {
+  height: 100px;
+  width: 100px;
+  background: #fffacd;
+}
+
+#filmstrip {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 133px;
+  background: blue;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#filmstrip .photo {
+  height: 113px;
+  margin: 10px;
+  display: inline-block;
+}
+
+#filmstrip .photo img {
+  height: 113px;
+}
+
+
+/* v1 */
+
+body {
+  font-family: tahoma, verdana, arial, sans-serif;
+}
+
+.album img {
+  height: 100px;
+  display: inline;
+  margin: 6px;
+}
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+#prompt {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  width: 610px;
+  margin-bottom: 200px;
+}
+
+#prompt .explanation {
+  text-align: center;
+}
+
+#prompt a {
+  text-decoration: none;
+  background: none;
+  color: white;
+}
+
+#prompt a:hover {
+  color: #ccc;
+}
+
+#prompt .provider, #prompt .next_step {
+  width: 300px;
+  text-align: center;
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+}
+
+#prompt .next_step {
+  float: right;
+}
+
+#prompt .provider>div {
+  margin: 10px;
+}
+
+#prompt .facebook {
+  float: left;
+  background: #3B5998;
+}
+
+#prompt .flickr {
+  float: right;
+  background: #FF0084;
+}
+
+#tray {
+  max-height: 250px;
+  overflow: auto;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #F7F7F7;
+  z-index: 10;
+  display: none;
+  border-bottom: 1px solid #BBB;
+}
+
+#source {
+  position: relative;
+  display: none;
+}
+
+#source h3 {
+  color: #FF0084;
+}
+

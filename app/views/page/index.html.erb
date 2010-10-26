@@ -1,0 +1,117 @@
+<html>
+<head>
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
+  <%= stylesheet_link_tag "jquery-ui-1.8.5.lightness.css" %>
+  <%= stylesheet_link_tag "intersection.css" %>
+
+  <%= javascript_include_tag "application" %>
+
+
+  <title>Intersection: The Media Mover</title>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3177874-6']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+</head>
+<body>
+
+<div id="prompt">
+  <div class="explanation">
+    <h1>Move Photos from Flickr to Facebook</h1>
+
+    <p>After connecting to both services, you'll be able to drag your flickr photos directly into your facebook
+      albums. This service never stores any personal information.</p>
+  </div>
+
+  <div class="facebook provider">
+    <div>
+      <% if session[:facebook_account_id] %>
+        &#x2713; Connected to Facebook!
+      <% else %>
+        <%= link_to "Connect to Facebook", new_account_path(:provider => "facebook") %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flickr provider clearfix">
+    <div>
+      <% if session[:flickr_account_id] %>
+        &#x2713; Connected to Flickr!
+      <% else %>
+        <%= link_to "Connect to Flickr", new_account_path(:provider => "flickr") %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<div id="accounts_container">
+  <div id="connect"></div>
+  <% @accounts.each do |account| %>
+    <div class="<%= account.provider %> account">
+      <h2><%= account.provider %> albums</h2>
+      <% account.albums.each do |album| %>
+        <div class="album" data-id="<%= album.id %>">
+          <div class="image">
+            <!-- spinner, or -->
+            <!-- primary photo -->
+          </div>
+          <div class="info">
+            <%= album.name %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div id="filmstrip">
+</div>
+
+<% if @facebook_account and @flickr_account and 1 == 0 %>
+
+  <div id="tray">
+
+    <h2>Facebook Albums</h2>
+
+    <% @facebook_account.albums.each do |album| %>
+      <div class="facebook album" data-album-id="<%= album.facebook_id %>">
+        <p><%= album.name %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="source">
+    <h2>Flickr Sets</h2>
+
+    <p>Move photos from flickr to facebook by dragging an image from these sets onto a facebook album.</p>
+
+    <% @flickr_account.albums.each do |album| %>
+      <div class="<%= @flickr_account.provider %> album">
+        <h3><%= album.name.upcase %></h3>
+        <% album.images.each do |image| %>
+          <img src="<%= image.url %>"/>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+</body>
+</html>
+
