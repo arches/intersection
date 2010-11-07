@@ -74,11 +74,6 @@ IMM.Album = function(displayNode) {
 
   var context = this;
 
-  IMM.ResizeSquare($(context.displayNode).find("img"));
-//  $(this.displayNode).find("img").load(function() {
-//    IMM.ResizeSquare($(context.displayNode).find("img"));
-//  });
-
   if ($(this.displayNode).find("img").hasClass("spinner")) {
     this.load();
   }
@@ -171,6 +166,7 @@ IMM.ResizeSquare = function(element) {
     $(sizeNode).appendTo("#stage");
     var height = sizeNode.offsetHeight;
     var width = sizeNode.offsetWidth;
+    if (height == 0 || width == 0) return;
     if (height > width) {
       element.css('width', '133px');
     } else {
@@ -178,6 +174,7 @@ IMM.ResizeSquare = function(element) {
     }
   }
 };
+
 
 $(document).ready(function() {
 
@@ -192,6 +189,15 @@ $(document).ready(function() {
   $(".album").click(function() {
     IMM.FilmstripInstance.loadAlbum($(this).attr("data-id"));
   });
+
+  $(".album img").each(function(i, el) {
+    IMM.ResizeSquare(el);
+  });
+
+  $(".album img").load(function() {
+    IMM.ResizeSquare(this);
+  });
+
 
 //  setTimeout(function() {
 //    $("#prompt").fadeOut(3000, function() {
