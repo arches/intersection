@@ -75,9 +75,9 @@ IMM.Album = function(displayNode) {
   var context = this;
 
   IMM.ResizeSquare($(context.displayNode).find("img"));
-  $(this.displayNode).find("img").load(function() {
-    IMM.ResizeSquare($(context.displayNode).find("img"));
-  });
+//  $(this.displayNode).find("img").load(function() {
+//    IMM.ResizeSquare($(context.displayNode).find("img"));
+//  });
 
   if ($(this.displayNode).find("img").hasClass("spinner")) {
     this.load();
