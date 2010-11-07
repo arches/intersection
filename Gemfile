@@ -18,8 +18,8 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 
 gem 'crack'
 gem 'json'
-gem 'multipart-post'
 gem 'hoptoad_notifier'
+gem 'mime-types'
 
 # Bundle the extra gems:
 # gem 'bj'

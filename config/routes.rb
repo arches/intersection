@@ -1,6 +1,7 @@
 Intersection::Application.routes.draw do
   get "page/index"
   get "page/load_album_images"
+  post "page/move"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

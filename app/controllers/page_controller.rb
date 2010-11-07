@@ -32,4 +32,13 @@ class PageController < ApplicationController
       end
     end
   end
+
+  def move
+    album = Album.find(params[:id])
+    account = album.owner
+    account.new_photo(album, params[:url])
+    album.photos.destroy_all  # force a refresh next time
+    render :text => "success!"
+  end
+
 end

@@ -1,3 +1,5 @@
+require 'multipart'
+
 class FlickrAccount < ActiveRecord::Base
   has_many :albums, :as => :owner, :dependent => :destroy
 
@@ -77,6 +79,39 @@ class FlickrAccount < ActiveRecord::Base
 
   end
 
+  def new_photo(album, photo_url)
+
+#    unless photo_url.include? "static.flickr.com"
+      params = {}
+      params['api_key'] = FLICKR_TOKEN
+      params['auth_token'] = self.token
+      params['api_sig'] = flickr_sign(params)
+
+      url = self.flickr_url({}, "upload")
+      use_ssl = url.include? 'https'
+      url = URI.parse(url)
+      path = url.query.blank? ? url.path : "#{url.path}?#{url.query}"
+
+      # can't add the photo until after we make the url, we don't want it in the query string
+      params['photo'] = photo_url
+      mp = Multipart::Post.new
+      query, headers = mp.prepare_query(params)
+
+      xml = nil
+      Net::HTTP.new(url.host, url.port).start do |http|
+        xml = http.post(url.path, query, headers)
+      end
+      parsed = Crack::XML.parse(xml.body)
+      photo_id = parsed["rsp"]["photoid"]
+#    end
+
+    # if we got a photo ID back, add it to the specified photoset
+    xml = get(self.flickr_url({"method" => "flickr.photosets.addPhoto", "photoset_id" => album.flickr_album.photoset_id, "photo_id" => photo_id, 'auth_token' => self.token}))
+    parsed = Crack::XML.parse(xml.body)
+    photos = parsed["rsp"]["photos"]["photo"]
+
+  end
+
   def self.flickr_sign(arg_hash)
     arg_list = []
     arg_hash.keys.sort.each do |key|
@@ -133,4 +168,12 @@ class FlickrAccount < ActiveRecord::Base
     "flickr"
   end
 
+  def file_to_multipart(key, filename, mime_type, content)
+    "Content-Disposition: form-data; name=\"#{CGI::escape(key)}\"; filename=\"#{filename}\"\r\n" +
+          "Content-Transfer-Encoding: binary\r\n" +
+          "Content-Type: #{mime_type}\r\n" +
+          "\r\n" +
+          "#{content}\r\n"
+  end
+  
 end

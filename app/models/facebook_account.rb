@@ -32,6 +32,31 @@ class FacebookAccount < ActiveRecord::Base
     end
   end
 
+
+  def new_photo(album, url)
+    image_data = get(url).body # NOT a facebook url
+#    POST TO FACEBOOK, as multipart
+
+    params = [
+          file_to_multipart('file', 'file.jpg', 'image/jpg', image_data)]
+
+    boundary = '349832898984244898448024464570528145'
+    query = params.collect { |p| '--' + boundary + "\r\n" + p }.join('') + "--" + boundary + "--\r\n"
+
+    url = "https://graph.facebook.com/#{self.remote_id}/photos?access_token=#{CGI::escape self.token}"
+    use_ssl = url.include? 'https'
+    url = URI.parse(url)
+
+    http = Net::HTTP.new(url.host, use_ssl ? 443 : nil)
+    http.use_ssl = use_ssl
+    res = http.post2("/#{album.remote_id}/photos?access_token=#{CGI::escape self.token}",
+                query,
+                "Content-type" => "multipart/form-data; boundary=" + boundary)
+
+
+
+  end
+
   def provider
     "facebook"
   end
@@ -53,5 +78,13 @@ class FacebookAccount < ActiveRecord::Base
     end
     res
   end
-  
+
+  def file_to_multipart(key, filename, mime_type, content)
+    "Content-Disposition: form-data; name=\"#{CGI::escape(key)}\"; filename=\"#{filename}\"\r\n" +
+          "Content-Transfer-Encoding: binary\r\n" +
+          "Content-Type: #{mime_type}\r\n" +
+          "\r\n" +
+          "#{content}\r\n"
+  end
+
 end

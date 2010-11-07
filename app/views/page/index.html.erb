@@ -3,7 +3,6 @@
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
-  <%= stylesheet_link_tag "jquery-ui-1.8.5.lightness.css" %>
   <%= stylesheet_link_tag "intersection.css" %>
 
   <%= javascript_include_tag "application" %>
@@ -34,10 +33,9 @@
 
 <div id="prompt">
   <div class="explanation">
-    <h1>Move Photos from Flickr to Facebook</h1>
-
-    <p>After connecting to both services, you'll be able to drag your flickr photos directly into your facebook
-      albums. This service never stores any personal information.</p>
+    <h1>Social Media Dropbox</h1>
+    <h2>Move photos between Flickr and Facebook</h2>
+    <p>After connecting to both services, you'll be able to drag your photos directly between albums on separate social sites. This service never stores any personal information.</p>
   </div>
 
   <div class="facebook provider">
@@ -69,7 +67,7 @@
       <h2><%= account.provider %> albums</h2>
       <% account.albums.each do |album| %>
         <div class="album" data-id="<%= album.id %>">
-          <div class="image">
+          <div class="photo">
             <% if album.primary_photo_url %>
               <%= image_tag album.primary_photo_url %>
             <% elsif album.photos and album.photos.length > 0 %>
@@ -90,36 +88,9 @@
 </div>
 
 <div id="filmstrip">
+  <img src="/images/spinner.gif" class="spinner" />
+  <div class="slider"></div>
 </div>
-
-<% if @facebook_account and @flickr_account and 1 == 0 %>
-
-  <div id="tray">
-
-    <h2>Facebook Albums</h2>
-
-    <% @facebook_account.albums.each do |album| %>
-      <div class="facebook album" data-album-id="<%= album.facebook_id %>">
-        <p><%= album.name %></p>
-      </div>
-    <% end %>
-  </div>
-
-  <div id="source">
-    <h2>Flickr Sets</h2>
-
-    <p>Move photos from flickr to facebook by dragging an image from these sets onto a facebook album.</p>
-
-    <% @flickr_account.albums.each do |album| %>
-      <div class="<%= @flickr_account.provider %> album">
-        <h3><%= album.name.upcase %></h3>
-        <% album.images.each do |image| %>
-          <img src="<%= image.url %>"/>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
 
 </body>
 </html>

@@ -12,37 +12,37 @@
   <component name="GemRequirementsHolder" version="3">
     <requirement>
       <requirement>
-        <dependency name="crack" version="0" bound="GREATER_OR_EQUAL" git="false" doRequire="true" />
+        <dependency name="crack" version="0" bound="GREATER_OR_EQUAL" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />
     </requirement>
     <requirement>
       <requirement>
-        <dependency name="hoptoad_notifier" version="0" bound="GREATER_OR_EQUAL" git="false" doRequire="true" />
+        <dependency name="hoptoad_notifier" version="0" bound="GREATER_OR_EQUAL" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />
     </requirement>
     <requirement>
       <requirement>
-        <dependency name="json" version="0" bound="GREATER_OR_EQUAL" git="false" doRequire="true" />
+        <dependency name="json" version="0" bound="GREATER_OR_EQUAL" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />
     </requirement>
     <requirement>
       <requirement>
-        <dependency name="multipart-post" version="0" bound="GREATER_OR_EQUAL" git="false" doRequire="true" />
+        <dependency name="mime-types" version="0" bound="GREATER_OR_EQUAL" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />
     </requirement>
     <requirement>
       <requirement>
-        <dependency name="rails" version="3.0.0" bound="EQUAL" git="false" doRequire="true" />
+        <dependency name="rails" version="3.0.0" bound="EQUAL" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />
     </requirement>
     <requirement>
       <requirement>
-        <dependency name="sqlite3-ruby" version="0" bound="GREATER_OR_EQUAL" lib="sqlite3" git="false" doRequire="true" />
+        <dependency name="sqlite3-ruby" version="0" bound="GREATER_OR_EQUAL" lib="sqlite3" git="false" path="false" doRequire="true" />
       </requirement>
       <source from="Gemfile" />
     </requirement>
@@ -84,6 +84,7 @@
     <orderEntry type="library" scope="PROVIDED" name="[gem] json (v1.4.6, /Library/Ruby/Gems/1.8/gems/json-1.4.6)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] hoptoad_notifier (v2.3.8, /Library/Ruby/Gems/1.8/gems/hoptoad_notifier-2.3.8)" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="[gem] jelly (v0.8.10, /Library/Ruby/Gems/1.8/bundler/gems/jelly-d494adf95ce3)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] hoptoad_notifier (v2.3.10, /Library/Ruby/Gems/1.8/gems/hoptoad_notifier-2.3.10)" level="application" />
   </component>
 </module>
 

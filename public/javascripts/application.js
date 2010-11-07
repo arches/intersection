@@ -1,35 +1,44 @@
 var IMM = {};
 
 IMM.Filmstrip = function() {
-
   this.photos = [];
-
   this.displayNode = $("#filmstrip")[0];
-
+  this.slider = $("#filmstrip .slider")[0];
 };
 
 IMM.Filmstrip.prototype.loadAlbum = function(id) {
+  if ($(this.displayNode).css("display") == "none") {
+    $(this.displayNode).fadeIn();
+  }
+  var album = IMM.Albums[id];
   if (album.photos != null) {
     this.empty();
     var photo;
     var pLength = album.photos.length;
     for (var i = 0; i < pLength; i++) {
       photo = album.photos[i];
-      new IMM.Filmstrip.photo(photo.url);
+      new IMM.Filmstrip.Photo(photo.url);
     }
+    $("#filmstrip .spinner").hide();
+    $("#filmstrip .slider").show();
+  } else {
+    this.empty();
+    var context = this;
+    album.load(function() {
+      context.loadAlbum(id); // try again
+    }); // wouldn't have to do this if we passed the json on initial load. we often have it.
   }
 };
 
-IMM.Filmstrip.prototype.onLoadAlbumSuccess = function(json, httpCode, xmlHttpRequest) {
-};
-
 IMM.Filmstrip.prototype.empty = function() {
-  $(this.displayNode).children().fadeOut();
+  $("#filmstrip .slider").hide();
+  $("#filmstrip .spinner").show();
+  $("#filmstrip .slider").children().remove();
 };
 
 IMM.Filmstrip.prototype.addPhoto = function(photo) {
   this.photos.push(photo);
-  this.displayNode.appendChild(photo.displayNode);
+  $("#filmstrip .slider")[0].appendChild(photo.displayNode);
 };
 
 IMM.Filmstrip.prototype.onLoadAlbumError = function() {
@@ -43,7 +52,7 @@ IMM.Filmstrip.Photo = function(url) {
   IMM.FilmstripInstance.addPhoto(this);
 
   var context = this;
-  $(this.displayNode).draggable({revert:true, zIndex:10,
+  $(this.displayNode).draggable({revert:true, zIndex:10, appendTo: 'body',
     helper: function() {
       var new_img = document.createElement("img");
       $(new_img).css("opacity", 0.3);
@@ -64,18 +73,10 @@ IMM.Album = function(displayNode) {
   var context = this;
 
   if ($(this.displayNode).find("img").hasClass("spinner")) {
-    $.ajax({
-      type: 'GET',
-      url: "/page/load_album_images?id=" + context.id,
-      success: function(json, httpCode, xmlHttpRequest){
-        context.onLoadAlbumSuccess(json, httpCode, xmlHttpRequest);
-      },
-      dataType: "json",
-      error: context.onLoadAlbumError
-    });
+    this.load();
   } else {
     var context = this;
-    $(this.displayNode).find("img").ready(function(){
+    $(this.displayNode).find("img").ready(function() {
       IMM.ResizeSquare($(context.displayNode).find("img"));
     });
   }
@@ -83,19 +84,41 @@ IMM.Album = function(displayNode) {
   $(this.displayNode).droppable({
     hoverClass: "dropVisual",
     drop: function(event, ui) {
-//      $.post("/page/move", {id: $(this).attr("data-id"), url: ui.draggable[0].src});
-      $(context.displayNode).animate({backgroundColor:"yellow"}, {duration:100, complete:function() {
-        $(context.displayNode).animate({backgroundColor:"#fff"}, {duration:100, complete:function() {
-          $(context.displayNode).animate({backgroundColor:"yellow"}, {duration:100, complete:function() {
-            $(context.displayNode).animate({backgroundColor:"#fff"}, {duration:100});
-          }});
-        }});
+      $.post("/page/move", {id: $(this).attr("data-id"), url: ui.draggable.find("img").attr("src")});
+      context.photos = null; // force a refresh next time
+      $(context.displayNode).css("background", "#90ee90");  // keep the hover color
+      $(context.displayNode).animate({backgroundColor:"green"}, {duration:300, complete:function() {
+        $(context.displayNode).animate({backgroundColor:"#fff"}, {duration:1000});
       }});
     }
   });
 };
 
-IMM.Album.prototype.onLoadAlbumSuccess = function(json, httpCode, xmlHttpRequest){
+IMM.Album.prototype.load = function(callback) {
+  var context = this;
+  var cb = callback;
+  $.ajax({
+    type: 'GET',
+    url: "/page/load_album_images?id=" + context.id,
+    success: function(json, httpCode, xmlHttpRequest, callback) {
+      context.onLoadAlbumSuccess(json, httpCode, xmlHttpRequest);
+      if (cb) {
+        cb.call();
+      }
+    },
+    error: function(json, httpCode, xmlHttpRequest, callback) {
+      context.onLoadAlbumError(json, httpCode, xmlHttpRequest);
+    },
+    dataType: "json"
+  });
+};
+
+IMM.Album.prototype.onLoadAlbumSuccess = function(json, httpCode, xmlHttpRequest) {
+  // remove the spinner regardless
+  if ($(this.displayNode).find('img').hasClass('spinner')) {
+    $(this.displayNode).find('img').hide();
+  }
+
   var pLength = json.length;
   var photo;
   this.photos = [];
@@ -103,19 +126,20 @@ IMM.Album.prototype.onLoadAlbumSuccess = function(json, httpCode, xmlHttpRequest
     photo = json[i]['photo'];
     this.photos.push(photo);
     if ($(this.displayNode).find('img').hasClass('spinner')) {
-      $(this.displayNode).find('img').hide();
       $(this.displayNode).find('img').attr("src", photo.url);
       $(this.displayNode).find('img').removeClass('spinner');
-      $(this.displayNode).find('img').load(function(){
+      $(this.displayNode).find('img').load(function() {
         IMM.ResizeSquare(this);
         $(this).show();
       });
     }
   }
-//  new IMM.Filmstrip.Photo(photo.url);
 };
 
-IMM.Album.prototype.onLoadAlbumError = function(){
+IMM.Album.prototype.onLoadAlbumError = function() {
+  if ($(this.displayNode).find('img').hasClass('spinner')) {
+    $(this.displayNode).find('img').hide();
+  }
 };
 
 IMM.Album.prototype.onClick = function(e) {
@@ -127,7 +151,7 @@ IMM.AlbumGallery = function() {
   IMM.FilmstripInstance.loadAlbum(this);
 };
 
-IMM.ResizeSquare = function(element){
+IMM.ResizeSquare = function(element) {
   element = $(element);
   if (!element.hasClass('spinner')) {
     var sizeNode = document.createElement('img');
@@ -147,9 +171,10 @@ $(document).ready(function() {
 
   // save off the singleton
   IMM.FilmstripInstance = new IMM.Filmstrip();
+  IMM.Albums = {};
 
-  $(".album").each(function(){
-    new IMM.Album(this);
+  $(".album").each(function() {
+    IMM.Albums[$(this).attr("data-id")] = new IMM.Album(this);
   });
 
   $(".album").click(function() {
