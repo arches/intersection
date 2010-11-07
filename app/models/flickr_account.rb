@@ -107,9 +107,6 @@ class FlickrAccount < ActiveRecord::Base
 
     # if we got a photo ID back, add it to the specified photoset
     xml = get(self.flickr_url({"method" => "flickr.photosets.addPhoto", "photoset_id" => album.flickr_album.photoset_id, "photo_id" => photo_id, 'auth_token' => self.token}))
-    parsed = Crack::XML.parse(xml.body)
-    photos = parsed["rsp"]["photos"]["photo"]
-
   end
 
   def self.flickr_sign(arg_hash)
