@@ -36,8 +36,17 @@ class PageController < ApplicationController
   def move
     album = Album.find(params[:id])
     account = album.owner
-    account.new_photo(album, params[:url])
+    photo = Photo.find(params[:photo_id])
+    account.new_photo(album, photo)
     album.photos.destroy_all  # force a refresh next time
+    if account.provider == "flickr"
+      account.albums.each do |album|
+        if album.name == "Photostream"
+          album.photos.destroy_all  # also refresh photostream for flickr
+          break
+        end
+      end
+    end
     render :text => "success!"
   end
 

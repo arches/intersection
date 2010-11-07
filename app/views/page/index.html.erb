@@ -63,7 +63,7 @@
 <div id="accounts_container">
   <!--<div id="connect"></div>-->
   <% @accounts.each do |account| %>
-    <div class="<%= account.provider %> account">
+    <div class="<%= account.provider %> account" data-provider="<%= account.provider %>"">
       <h2><%= account.provider %> albums</h2>
       <% account.albums.each do |album| %>
         <div class="album" data-id="<%= album.id %>">
@@ -78,7 +78,7 @@
             <!-- spinner, or -->
             <!-- primary photo -->
           </div>
-          <div class="info">
+          <div class="info" data-name="<%= album.name %>">
             <%= album.name %>
           </div>
         </div>

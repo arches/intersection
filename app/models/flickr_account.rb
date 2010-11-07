@@ -79,9 +79,9 @@ class FlickrAccount < ActiveRecord::Base
 
   end
 
-  def new_photo(album, photo_url)
+  def new_photo(album, photo)
 
-#    unless photo_url.include? "static.flickr.com"
+    unless photo.album.owner.provider == "flickr"
       params = {}
       params['api_key'] = FLICKR_TOKEN
       params['auth_token'] = self.token
@@ -93,7 +93,7 @@ class FlickrAccount < ActiveRecord::Base
       path = url.query.blank? ? url.path : "#{url.path}?#{url.query}"
 
       # can't add the photo until after we make the url, we don't want it in the query string
-      params['photo'] = photo_url
+      params['photo'] = photo.url
       mp = Multipart::Post.new
       query, headers = mp.prepare_query(params)
 
@@ -103,7 +103,9 @@ class FlickrAccount < ActiveRecord::Base
       end
       parsed = Crack::XML.parse(xml.body)
       photo_id = parsed["rsp"]["photoid"]
-#    end
+    else
+      photo_id = photo.remote_id.split(":")[2]
+    end
 
     # if we got a photo ID back, add it to the specified photoset
     xml = get(self.flickr_url({"method" => "flickr.photosets.addPhoto", "photoset_id" => album.flickr_album.photoset_id, "photo_id" => photo_id, 'auth_token' => self.token}))

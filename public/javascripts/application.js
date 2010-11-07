@@ -17,7 +17,7 @@ IMM.Filmstrip.prototype.loadAlbum = function(id) {
     var pLength = album.photos.length;
     for (var i = 0; i < pLength; i++) {
       photo = album.photos[i];
-      new IMM.Filmstrip.Photo(photo.url);
+      new IMM.Filmstrip.Photo(photo.id, photo.url);
     }
     $("#filmstrip .spinner").hide();
     $("#filmstrip .slider").show();
@@ -44,10 +44,10 @@ IMM.Filmstrip.prototype.addPhoto = function(photo) {
 IMM.Filmstrip.prototype.onLoadAlbumError = function() {
 };
 
-IMM.Filmstrip.Photo = function(url) {
+IMM.Filmstrip.Photo = function(id, url) {
   this.url = url;
   this.displayNode = document.createElement("div");
-  this.displayNode.innerHTML = ["<img src='", url, "'>"].join('');
+  this.displayNode.innerHTML = ["<img src='", url, "' data-id='", id, "'>"].join('');
   this.displayNode.className = "photo";
   IMM.FilmstripInstance.addPhoto(this);
 
@@ -69,6 +69,8 @@ IMM.Album = function(displayNode) {
   this.displayNode = displayNode;
   this.photos = null;
   this.id = $(this.displayNode).attr("data-id");
+  this.provider = $(this.displayNode).parents(".account").attr("data-provider");
+  this.name = $(this.displayNode).find(".info").attr('data-name');
 
   var context = this;
 
@@ -84,8 +86,16 @@ IMM.Album = function(displayNode) {
   $(this.displayNode).droppable({
     hoverClass: "dropVisual",
     drop: function(event, ui) {
-      $.post("/page/move", {id: $(this).attr("data-id"), url: ui.draggable.find("img").attr("src")});
+      $.post("/page/move", {id: $(this).attr("data-id"), url: ui.draggable.find("img").attr("src"), photo_id: ui.draggable.find("img").attr("data-id")});
       context.photos = null; // force a refresh next time
+      if (context.provider == "flickr") {
+        for (var i in IMM.Albums) {
+          var album = IMM.Albums[i];
+          if (album.provider == "flickr" && album.name == "Photostream") {
+            album.photos = null;
+          }
+        }
+      }
       $(context.displayNode).css("background", "#90ee90");  // keep the hover color
       $(context.displayNode).animate({backgroundColor:"green"}, {duration:300, complete:function() {
         $(context.displayNode).animate({backgroundColor:"#fff"}, {duration:1000});

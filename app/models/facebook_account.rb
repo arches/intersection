@@ -13,7 +13,6 @@ class FacebookAccount < ActiveRecord::Base
   def get_albums
     self.albums.destroy_all if self.albums
     
-    #TODO: save primary image in database
     xml = get("https://graph.facebook.com/me/albums?client_id=#{FACEBOOK_TOKEN}&client_secret=#{FACEBOOK_SECRET}&access_token=#{CGI::escape self.token}")
     parsed = JSON.parse(xml.body)
     parsed["data"].each do |album|
@@ -33,8 +32,8 @@ class FacebookAccount < ActiveRecord::Base
   end
 
 
-  def new_photo(album, url)
-    image_data = get(url).body # NOT a facebook url
+  def new_photo(album, photo)
+    image_data = get(photo.url).body # NOT a facebook url
 #    POST TO FACEBOOK, as multipart
 
     params = [

@@ -71,6 +71,7 @@ body {
   width: 133px;
   padding: 10px;
   display: inline-block;
+  cursor: pointer;
 }
 
 .album .photo img {
