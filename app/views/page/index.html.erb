@@ -31,13 +31,17 @@
 
 <div id="stage">&nbsp;</div>
 
-<%= link_to "logout", logout_path, :id => "logout" if session[:flickr_account_id] or session[:facebook_account_id]%>
+<%= link_to "logout", logout_path, :id => "logout" if session[:flickr_account_id] or session[:facebook_account_id] %>
 
 <div id="prompt">
   <div class="explanation">
     <h1>Social Media Dropbox</h1>
+
     <h2>Move photos between Flickr and Facebook</h2>
-    <p>After connecting to both services, you'll be able to drag your photos directly between albums on separate social sites. This service never stores any personal information.</p>
+    <% unless session[:flickr_account_id] and session[:facebook_account_id] %>
+      <p>After connecting to both services, you'll be able to drag your photos directly between albums on separate
+        social sites. This service never stores any personal information.</p>
+    <% end %>
   </div>
 
   <div class="facebook provider">
@@ -59,41 +63,55 @@
       <% end %>
     </div>
   </div>
+
+  <% if session[:flickr_account_id] and session[:facebook_account_id] %>
+    <div class="explanation">
+      <br/>
+      <br/>
+
+      <p><b>Step 1:</b> Click an album to load its photos</p>
+
+      <p><b>Step 2:</b> Drag one of those photos onto a different album</p>
+    </div>
+  <% end %>
 </div>
 
 
 <div id="accounts_container">
   <!--<div id="connect"></div>-->
   <% @accounts.each do |account| %>
-    <div class="<%= account.provider %> account" data-provider="<%= account.provider %>"">
-      <h2><%= account.provider %> albums <%= link_to "refresh", refresh_path(:provider => account.provider), :class => "refresh" %></h2>
-      <% account.albums.each do |album| %>
-        <div class="album" data-id="<%= album.id %>">
-          <div class="photo">
-            <% if album.primary_photo_url %>
-              <%= image_tag album.primary_photo_url %>
-            <% elsif album.photos and album.photos.length > 0 %>
-                <%= image_tag album.photos[0].url %>
-            <% else %>
-              <%= image_tag "spinner.gif", :class => 'spinner' %>
-            <% end %>
-            <!-- spinner, or -->
-            <!-- primary photo -->
-          </div>
-          <div class="info" data-name="<%= album.name %>">
-            <%= album.name %>
-          </div>
+    <div class="<%= account.provider %> account" data-provider="<%= account.provider %>"
+    ">
+    <h2><%= account.provider %>
+      albums <%= link_to "refresh", refresh_path(:provider => account.provider), :class => "refresh" %></h2>
+    <% account.albums.each do |album| %>
+      <div class="album" data-id="<%= album.id %>">
+        <div class="photo">
+          <% if album.primary_photo_url %>
+            <%= image_tag album.primary_photo_url %>
+          <% elsif album.photos and album.photos.length > 0 %>
+            <%= image_tag album.photos[0].url %>
+          <% else %>
+            <%= image_tag "spinner.gif", :class => 'spinner' %>
+          <% end %>
+          <!-- spinner, or -->
+          <!-- primary photo -->
         </div>
-      <% end %>
+        <div class="info" data-name="<%= album.name %>">
+          <%= album.name %>
+        </div>
+      </div>
+    <% end %>
     </div>
   <% end %>
-</div>
+  </div>
 
-<div id="filmstrip">
-  <img src="/images/spinner.gif" class="spinner" />
-  <div class="slider"></div>
-</div>
+  <div id="filmstrip">
+    <img src="/images/spinner.gif" class="spinner"/>
 
-</body>
+    <div class="slider"></div>
+  </div>
+
+  </body>
 </html>
 

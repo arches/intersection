@@ -83,7 +83,6 @@ body {
   width: 133px;
   padding: 10px;
   display: inline-block;
-  cursor: pointer;
 }
 
 .album .photo img {
@@ -91,6 +90,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  cursor: pointer;
 }
 
 .album .photo img.spinner {
