@@ -155,7 +155,7 @@ a.refresh {
   color: white;
   display: inline-block;
   font-size: 10px;
-  padding: 4px 12px;
+  padding: 0 4px;
   position: relative;
   text-decoration: none;
   top: -3px;
