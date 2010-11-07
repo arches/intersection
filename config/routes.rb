@@ -14,6 +14,7 @@ Intersection::Application.routes.draw do
   match '/accounts/:action' => 'account'
   match '/r' => "account#reset"
   match '/cf' => "account#check_flickr_token"
+  match '/page/refresh/:provider' => 'page#refresh', :as => "refresh"
 
 #  resources :accounts do
 #    collection do

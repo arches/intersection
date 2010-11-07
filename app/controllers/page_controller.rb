@@ -50,4 +50,10 @@ class PageController < ApplicationController
     render :text => "success!"
   end
 
+  def refresh
+    account = "#{params[:provider]}_account".camelize.constantize.find_by_id(session["#{params[:provider]}_account_id".to_sym])
+    account.albums.destroy_all
+    redirect_to root_path
+  end
+
 end

@@ -64,7 +64,7 @@
   <!--<div id="connect"></div>-->
   <% @accounts.each do |account| %>
     <div class="<%= account.provider %> account" data-provider="<%= account.provider %>"">
-      <h2><%= account.provider %> albums</h2>
+      <h2><%= account.provider %> albums <%= link_to "refresh", refresh_path(:provider => account.provider), :class => "refresh" %></h2>
       <% account.albums.each do |album| %>
         <div class="album" data-id="<%= album.id %>">
           <div class="photo">
