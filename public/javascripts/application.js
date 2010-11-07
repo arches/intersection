@@ -190,10 +190,12 @@ $(document).ready(function() {
     IMM.FilmstripInstance.loadAlbum($(this).attr("data-id"));
   });
 
+  // get anything that's already loaded
   $(".album img").each(function(i, el) {
     IMM.ResizeSquare(el);
   });
 
+  // catch whatever hasn't loaded yet
   $(".album img").load(function() {
     IMM.ResizeSquare(this);
   });
