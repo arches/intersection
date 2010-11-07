@@ -12,7 +12,7 @@ Intersection::Application.routes.draw do
 
   match '/accounts/new/:provider' => 'account#new', :as => "new_account"
   match '/accounts/:action' => 'account'
-  match '/r' => "account#reset"
+  match '/r' => "account#reset", :as => "logout"
   match '/cf' => "account#check_flickr_token"
   match '/page/refresh/:provider' => 'page#refresh', :as => "refresh"
 

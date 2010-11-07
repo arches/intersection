@@ -31,6 +31,8 @@
 
 <div id="stage">&nbsp;</div>
 
+<%= link_to "logout", logout_path, :id => "logout" if session[:flickr_account_id] or session[:facebook_account_id]%>
+
 <div id="prompt">
   <div class="explanation">
     <h1>Social Media Dropbox</h1>
