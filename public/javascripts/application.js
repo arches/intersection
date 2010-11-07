@@ -78,7 +78,7 @@ IMM.Album = function(displayNode) {
     this.load();
   } else {
     var context = this;
-    $(this.displayNode).find("img").ready(function() {
+    $(this.displayNode).find("img").load(function() {
       IMM.ResizeSquare($(context.displayNode).find("img"));
     });
   }
