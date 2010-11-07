@@ -75,7 +75,7 @@
       <file leaf-file-name="application.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/application.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="91" column="32" selection-start="2845" selection-end="2845" vertical-scroll-proportion="0.5685752">
+            <state line="101" column="55" selection-start="3366" selection-end="3366" vertical-scroll-proportion="0.48868176">
               <folding />
             </state>
           </provider>
@@ -1065,7 +1065,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/application.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="91" column="32" selection-start="2845" selection-end="2845" vertical-scroll-proportion="0.5685752">
+        <state line="101" column="55" selection-start="3366" selection-end="3366" vertical-scroll-proportion="0.48868176">
           <folding />
         </state>
       </provider>

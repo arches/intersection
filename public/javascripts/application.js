@@ -98,7 +98,9 @@ IMM.Album = function(displayNode) {
       }
       $(context.displayNode).css("background", "#90ee90");  // keep the hover color
       $(context.displayNode).animate({backgroundColor:"green"}, {duration:300, complete:function() {
-        $(context.displayNode).animate({backgroundColor:"#fff"}, {duration:1000});
+        $(context.displayNode).animate({backgroundColor:"#fff"}, {duration:1000, complete:function(){
+          $(context.displayNode).css("background", null);
+        }});
       }});
     }
   });
